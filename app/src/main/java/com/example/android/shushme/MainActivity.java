@@ -150,8 +150,27 @@ public class MainActivity extends AppCompatActivity implements
 
     // TODO (3) Implement onActivityResult and check that the requestCode is PLACE_PICKER_REQUEST
     // TODO (4) In onActivityResult, use PlacePicker.getPlace to extract the Place ID and insert it into the DB
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
+            Place place = PlacePicker.getPlace(this, data);
+            if (place == null) {
+                Log.i(TAG, "No place selected");
+                return;
+            }
 
-    
+            // Extract the place information from the API
+            String placeName = place.getName().toString();
+            String placeAddress = place.getAddress().toString();
+            String placeID = place.getId();
+
+            // Insert a new place into DB
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(PlaceContract.PlaceEntry.COLUMN_PLACE_ID, placeID);
+            getContentResolver().insert(PlaceContract.PlaceEntry.CONTENT_URI, contentValues);
+        }
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
