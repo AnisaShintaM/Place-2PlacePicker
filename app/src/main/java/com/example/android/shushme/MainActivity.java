@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements
         Log.i(TAG, "API Client Connection Suspended!");
     }
 
+
     /***
      * Called when the Google API Client failed to connect to Google Play Services
      *
@@ -128,25 +129,21 @@ public class MainActivity extends AppCompatActivity implements
             return;
         }
         // TODO (1) Create a PlacePicker.IntentBuilder and call startActivityForResult
-        try {
-            // Start a new Activity for the Place Picker API, this will trigger {@code #onActivityResult}
-            // when a place is selected or with the user cancels.
-            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-            Intent i = builder.build(this);
-            startActivityForResult(i, PLACE_PICKER_REQUEST);
-        }
-            // TODO (2) Handle GooglePlayServices exceptions
 
-            catch (GooglePlayServicesRepairableException e) {
+            try {
+                // Start a new Activity for the Place Picker API, this will trigger {@code #onActivityResult}
+                // when a place is selected or with the user cancels.
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                Intent i = builder.build(this);
+                startActivityForResult(i, PLACE_PICKER_REQUEST);
+            } catch (GooglePlayServicesRepairableException e) {
                 Log.e(TAG, String.format("GooglePlayServices Not Available [%s]", e.getMessage()));
-             } catch (GooglePlayServicesNotAvailableException e) {
+            } catch (GooglePlayServicesNotAvailableException e) {
                 Log.e(TAG, String.format("GooglePlayServices Not Available [%s]", e.getMessage()));
-             } catch (Exception e) {
+            } catch (Exception e) {
                 Log.e(TAG, String.format("PlacePicker Exception: %s", e.getMessage()));
-             }
-
-        Toast.makeText(this, getString(R.string.location_permissions_granted_message), Toast.LENGTH_LONG).show();
-    }
+            }
+        }
 
     // TODO (3) Implement onActivityResult and check that the requestCode is PLACE_PICKER_REQUEST
     // TODO (4) In onActivityResult, use PlacePicker.getPlace to extract the Place ID and insert it into the DB
@@ -169,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements
             getContentResolver().insert(PlaceContract.PlaceEntry.CONTENT_URI, contentValues);
         }
     }
-
 
     @Override
     public void onResume() {
